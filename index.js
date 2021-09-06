@@ -1,7 +1,11 @@
 const express = require('express')
+var morgan = require(`morgan`)
 const app = express()
+const cors = require('cors')
 
 app.use(express.json())
+app.use(morgan(`tiny`))
+app.use(cors())
 
 let persons = [
     {
@@ -80,7 +84,6 @@ app.post('/api/persons', (request, response) => {
 app.get('/info', (request, response) => {
     response.send(`Phonebook has info for ${persons.length} people <br><br> ${new Date()}`)
 })
-
 
 const PORT = 3001
 app.listen(PORT, () => {
