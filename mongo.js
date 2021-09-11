@@ -1,12 +1,8 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 
-if (process.argv.length < 3) {
-    console.log('Please provide the password as an argument: node mongo.js <password>')
-    process.exit(1)
-}
-const password = process.argv[2]
-const url = `mongodb+srv://fullstack:${password}@cluster0.xfubv.mongodb.net/phonebook-app?retryWrites=true&w=majority`
-console.log(process.argv.length, "args")
+const url = `process.env.MONGODB_URI`
+
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
@@ -15,24 +11,17 @@ const personSchema = new mongoose.Schema({
 })
 
 const Person = mongoose.model('Person', personSchema)
-if (process.argv.length > 3) {
-    const name = process.argv[3]
-    const number = process.argv[4]
-    const person = new Person({
-        name: name,
-        number: number,
-    })
 
-    person.save().then(result => {
-        console.log(`person ${name} with number ${number} added`)
-        mongoose.connection.close()
+
+    // person.save().then(result => {
+    //     console.log(`person ${name} with number ${number} added`)
+    //     mongoose.connection.close()
+    // })
+
+Person.find({}).then(result => {
+    result.forEach(person => {
+        console.log(person)
     })
-} else {
-    Person.find({}).then(result => {
-        result.forEach(person => {
-            console.log(person)
-        })
-        mongoose.connection.close()
-    })
-}
+    mongoose.connection.close()
+})
 
